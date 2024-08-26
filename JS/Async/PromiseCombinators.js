@@ -41,37 +41,78 @@
 
 
 
-function fetchUserData(){
-    return new Promise((resolve,reject)=>{
-        setTimeout(()=>{
-            resolve({userId:1, userName: "Sai"})
-        },100)
-    })
-}
+// function fetchUserData(){
+//     return new Promise((resolve,reject)=>{
+//         setTimeout(()=>{
+//             resolve({userId:1, userName: "Sai"})
+//         },100)
+//     })
+// }
 
-function fetchUserPosts(){
-    return new Promise((resolve,reject)=>{
-        setTimeout(()=>{
-            // resolve(["Post1","Post2","Post3"])
-            reject("fetchUserPosts rejected: data could not be fetched")
-        },1000)
-    })
-}
+// function fetchUserPosts(){
+//     return new Promise((resolve,reject)=>{
+//         setTimeout(()=>{
+//             // resolve(["Post1","Post2","Post3"])
+//             reject("fetchUserPosts rejected: data could not be fetched")
+//         },1000)
+//     })
+// }
 
-let failedPromises=[];
-let promiseArr=[fetchUserData(),fetchUserPosts()];
-Promise.allSettled(promiseArr)
-.then(results=>{
-    results.forEach((result,index)=>{
-        if(result.status=="fulfilled"){
-            console.log(result.value);
-        }else if(result.status=="rejected"){
-            console.log(result.reason);
-            failedPromises.push(promiseArr[index])
-        }
-    })
-    console.log(failedPromises);
-})
+// let failedPromises=[];
+// let promiseArr=[fetchUserData(),fetchUserPosts()];
+// Promise.allSettled(promiseArr)
+// .then(results=>{
+//     results.forEach((result,index)=>{
+//         if(result.status=="fulfilled"){
+//             console.log(result.value);
+//         }else if(result.status=="rejected"){
+//             console.log(result.reason);
+//             failedPromises.push(promiseArr[index])
+//         }
+//     })
+//     console.log(failedPromises);
+// })
 
 
 // Data Loading : 5 sources . and if data of 1 sources is blocked . show data from other 4 sources. 
+
+
+// Promise.race
+
+function quickResolve(){
+    return new Promise((resolve,reject)=>{
+        setTimeout(()=>{resolve("quickly resolved")},1000)
+    })
+}
+
+function slowResolveOrFastReject(){
+    return new Promise((resolve,reject)=>{
+        setTimeout(()=>{resolve("quickly resolved")},2000)
+        setTimeout(()=>{reject(new Error("quickly rejected"))},500)
+    })
+}
+
+// Promise.race([quickResolve(),slowResolveOrFastReject()])
+// .then(result=>{
+//     console.log("result: ",result);
+// }).catch(err=>{
+//     console.log(err);
+// })
+
+// Use cases 
+// Timeouts for Promises: Ensuring that a promise either resolves within a certain time or times out, especially useful for network requests or any operations where a response time guarantee is needed.
+// Responding to User Interaction: Returning the result of whichever user interaction completes first (like clicking a button vs automatic timeout).
+// System Resource Races: Handling scenarios where multiple resources are requested and only the first is needed.
+
+
+Promise.any([quickResolve(),slowResolveOrFastReject()])
+.then(result=>{
+    console.log("result: ",result);
+}).catch(err=>{
+    console.log(err);
+})
+
+// use cases 
+// Fetching Redundant Resources: Loading the same resource from multiple sources or mirrors and using the first successful load.
+// Service Availability: Sending requests to multiple services or endpoints where you only need a response from one to proceed.
+// Competitive Conditions: Handling scenarios where multiple potential sources of data or actions are available, and only the fastest (first successful) is needed.
