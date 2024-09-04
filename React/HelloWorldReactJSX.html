@@ -6,14 +6,19 @@
     <title>Document</title>
     <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
 </head>
+<!-- babel is a js compiler that transforms the syntax. with react present , babel converts jsx into react.createElement calls.  -->
 <body>
     <div id="root"></div>
-    <script>
+    <script type="text/babel">
+        // tag allows us to write modern js and jsx directly 
         function App(){
             //js event handler 
-            return <h1>Hello From React</h1>
+            return <h1>Hello From React , thanks Babel</h1>
+            // babel converts the above statement into this 
+            // React.createElement("h1", null, "Hello from React, thanks Babel")
         }
 
         ReactDOM.render(<App/>,document.getElementById("root"))
