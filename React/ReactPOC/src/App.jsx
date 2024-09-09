@@ -7,6 +7,7 @@ import DisplayData from './Components/DisplayData'
 import ConditionalRendering from './Components/ConditionalRendering'
 import EventHandling from './Components/EventHandling'
 import Counter from './Components/Counter'
+import SimpleForm from './Components/SimpleForm'
 
 function App() {
   const [count, setCount] = useState(0);
@@ -30,7 +31,8 @@ function App() {
       {/* <DisplayData shoppingList={fruits} user={person}></DisplayData> */}
       {/* <ConditionalRendering isUserLoggedIn={isUserLoggedIn} username={username}></ConditionalRendering> */}
       {/* <EventHandling></EventHandling> */}
-      <Counter></Counter>
+      {/* <Counter></Counter> */}
+      <SimpleForm></SimpleForm>
       </>
   )
 }
