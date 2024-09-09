@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Counter2 from './Counter2';
 
 function Counter() {
     //returns an array,  varibale , function 
@@ -30,12 +31,15 @@ function Counter() {
     }
 
   return (
+    <>
     <div style={{display:"flex", gap:"2rem"}}>
         <button onClick={handleIncrement}>+</button>
         <p>{count}</p>
         <button onClick={handleDecrement} >-</button>
         <button onClick={handleReset} >Reset</button>
     </div>
+    <Counter2 count={count}></Counter2>
+    </>
   )
 }
 
