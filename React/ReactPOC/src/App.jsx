@@ -6,6 +6,7 @@ import MyComponent from './Components/MyComponent'
 import DisplayData from './Components/DisplayData'
 import ConditionalRendering from './Components/ConditionalRendering'
 import EventHandling from './Components/EventHandling'
+import Counter from './Components/Counter'
 
 function App() {
   const [count, setCount] = useState(0);
@@ -28,7 +29,8 @@ function App() {
       <MyComponent count={12}/> */}
       {/* <DisplayData shoppingList={fruits} user={person}></DisplayData> */}
       {/* <ConditionalRendering isUserLoggedIn={isUserLoggedIn} username={username}></ConditionalRendering> */}
-      <EventHandling></EventHandling>
+      {/* <EventHandling></EventHandling> */}
+      <Counter></Counter>
       </>
   )
 }
