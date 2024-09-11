@@ -8,6 +8,10 @@ import ConditionalRendering from './Components/ConditionalRendering'
 import EventHandling from './Components/EventHandling'
 import Counter from './Components/Counter'
 import SimpleForm from './Components/SimpleForm'
+import AdvancedForm1 from './Components/AdvancedForm1'
+import AdvancedForm2 from './Components/AdvancedForm2'
+import TemperatureInput from './Components/TemperatureInput'
+import TemperatureDisplay from './Components/TemperatureDisplay'
 
 function App() {
   const [count, setCount] = useState(0);
@@ -21,6 +25,11 @@ function App() {
 
   let isUserLoggedIn=true;
   let username="Jayadeep";
+  const [temperature, setTemperature] = useState(0);
+  const updateTemperature = (value) =>{
+    console.log("temperature state is chnaged in App");
+    setTemperature(value);
+  }
 
   return (
     <>
@@ -32,7 +41,11 @@ function App() {
       {/* <ConditionalRendering isUserLoggedIn={isUserLoggedIn} username={username}></ConditionalRendering> */}
       {/* <EventHandling></EventHandling> */}
       {/* <Counter></Counter> */}
-      <SimpleForm></SimpleForm>
+      {/* <SimpleForm></SimpleForm> */}
+      {/* <AdvancedForm1></AdvancedForm1> */}
+      {/* <AdvancedForm2></AdvancedForm2> */}
+      <TemperatureInput temperature={temperature} updateTemperature={updateTemperature}></TemperatureInput>
+      <TemperatureDisplay temperature={temperature} ></TemperatureDisplay>
       </>
   )
 }
