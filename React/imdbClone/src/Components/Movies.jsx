@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-
+import axios from 'axios'
+import MovieCard from "./MovieCard";
 function Movies() {
   const [movies, setMovies] = useState(null);
   const [pageNo, setPageNo] = useState(1);
+  const [watchList, setWatchList] = useState([]);
 
   const handlePrev = () => {
     if (pageNo == 1) return;
@@ -13,15 +15,30 @@ function Movies() {
     setPageNo(pageNo + 1);
   };
 
+  const addtoWatchList = (movieObj) => {
+    setWatchList([...watchList, movieObj]);
+  }
+
+  const removeFromWatchList = (movieObj) => {
+    const updatedWatchList = watchList.filter((movie) => movie.id!=movieObj.id);
+    setWatchList([...updatedWatchList]);
+    console.log(watchList);
+  }
   useEffect(() => {
     const getMovies = async function () {
       console.log("calling getMovies");
-      const resp = await fetch(
-        `https://api.themoviedb.org/3/trending/movie/day?api_key=3aec63790d50f3b9fc2efb4c15a8cf99&language=en-US&page=${pageNo}`
-      );
-      const { results } = await resp.json();
-      console.log(results);
-      setMovies(results);
+      const options = {
+        method: 'GET',
+        url: 'https://api.themoviedb.org/3/movie/now_playing',
+        params: {language: 'en-US', page: `${pageNo}`},
+        headers: {
+          accept: 'application/json',
+          Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxNzQ5ZWU4NjkyN2M4NjJlNmFjNDAzNjBlM2ViOGMwZCIsIm5iZiI6MTcyNjUwMjc0OC41OTIzNTQsInN1YiI6IjYyZDA0ZTRmMzk0YTg3MDRhZTVjNWEzZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.pk_1cunUa_P2SaLNSAeyo038EoUDSFceq2BROr3TRXI'
+        }
+      };
+      const response = await axios.request(options);
+      const movieData = response.data?.results;
+      setMovies(movieData);
     };
     getMovies();
   }, [pageNo]);
@@ -40,14 +57,13 @@ function Movies() {
           <div className="flex justify-evenly flex-wrap gap-8">
             {movies.map((movieObj) => {
               return (
-                <div
-                  className="h-[40vh] w-[200px] bg-center bg-cover rounded-xl hover:scale-110 duration-300 hover:cursor-pointer"
-                  style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original/${movieObj.poster_path})`}}
-                >
-                  <div className="text-white w-full text-center text-xl p-2 bg-gray-900/70 rounded-xl">
-                    {movieObj.title}
-                  </div>
-                </div>
+                <MovieCard 
+                key={movieObj.id} 
+                movieObj={movieObj}
+                watchList={watchList}
+                addtoWatchList={addtoWatchList}
+                removeFromWatchList={removeFromWatchList}
+                />
               );
             })}
           </div>
