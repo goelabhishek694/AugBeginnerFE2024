@@ -16,13 +16,15 @@ function Movies() {
   };
 
   const addtoWatchList = (movieObj) => {
-    setWatchList([...watchList, movieObj]);
+    let updatedWatchlist=[...watchList, movieObj];
+    setWatchList(updatedWatchlist);
+    localStorage.setItem("watchlist", JSON.stringify(updatedWatchlist));
   }
 
   const removeFromWatchList = (movieObj) => {
     const updatedWatchList = watchList.filter((movie) => movie.id!=movieObj.id);
     setWatchList([...updatedWatchList]);
-    console.log(watchList);
+    localStorage.setItem("watchlist", JSON.stringify(updatedWatchList));
   }
   useEffect(() => {
     const getMovies = async function () {
@@ -42,6 +44,13 @@ function Movies() {
     };
     getMovies();
   }, [pageNo]);
+
+  useEffect(() => {
+    if(localStorage.getItem("watchlist")){
+      let watchlistFromLS = JSON.parse(localStorage.getItem("watchlist"));
+      setWatchList(watchlistFromLS);
+    }
+  },[])
 
   return (
     <>
@@ -69,6 +78,7 @@ function Movies() {
           </div>
         </div>
       )}
+      {/* pagination */}
       <div className="bg-gray-400 h-[50px] w-full mt-6 p-4 flex justify-center gap-2 text-2xl">
         <div className="px-8" onClick={handlePrev}>
           <i class="fa-solid fa-caret-left"></i>
