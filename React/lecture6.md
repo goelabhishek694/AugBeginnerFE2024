@@ -457,3 +457,244 @@ Now, let's write the code that allows us to remove a movie from our watchlist wh
 `Answer` : As react is used to create SPA and essentially when you reload the page all of the application is initialized from scratch that means all of the saved movies and pagination will be lost. Let's think of solution . 
 
 `solution`: In this case we will again use the power of local storage to save the watch list , same can also be done for pagination 
+
+
+Observation : We see our application is still working as we are able to see list of movies but page number is reset to 1 and watch List is removed .
+
+Question : Why is this happening. Why are we facing the above issue ??
+
+Answer : As react is used to create SPA and essentially when you reload the page all of the application is initialized from scratch that means all of the saved movies and pagination will be lost. Let's think of solution .
+
+solution: In this case we will again use the power of local storage to save the watch list , same can also be done for pagination
+
+local storage (Review)
+Local storage is a feature in web browsers that allows web applications to store data locally within the user's browser.
+
+Features:
+
+Persistent Storage: Data stored in local storage persists even after the browser is closed and reopened.
+Large Storage Capacity: Typically allows storing more data (usually up to 5-10MB) compared to cookies.
+Accessible Across Pages: Data stored in local storage can be accessed by any page from the same origin (domain).
+No Expiration: Data remains stored indefinitely until explicitly removed by the web application or cleared by the user.
+Syntax:
+
+// To set an item in local storage
+localStorage.setItem('key', 'value');
+
+// To get an item from local storage
+const value = localStorage.getItem('key');
+
+// To remove an item from local storage
+localStorage.removeItem('key');
+
+// To clear all items from local storage
+localStorage.clear();
+adding local storage
+Let's use local storage persist the watchList
+
+addition/removal of movies from local storage
+movies.jsx
+
+ const addToWatchList = (movieObj) => {
+        let updatedWatchlist = [...watchList, movieObj];
+        setWatchList(updatedWatchlist);
+        localStorage.setItem('movies', JSON.stringify(updatedWatchlist))
+
+        
+    };
+    const removeFromWatchList = (movieObj) => {
+        let filtredMovies = watchList.filter((movie) => {
+            return movie.id != movieObj.id
+        })
+        setWatchList(filtredMovies)
+        localStorage.setItem('movies', JSON.stringify(filtredMovies))
+
+    };
+retrieving the local storage: We will be using useffect that will run only once after first render to check for any movies in the watchList movies.jsx
+useEffect(()=>{
+      let moviesFromLocalStorage = localStorage.getItem('movies')
+      if(!moviesFromLocalStorage){
+        return 
+      }
+      setWatchlist(JSON.parse(moviesFromLocalStorage))
+  } , [])
+If we reload it again it will watch list will still be intact
+
+Watch List component
+Now we are done with addition , removal of movies to watch list and saving that to local storage
+
+Now, let's proceed to the Watchlist component. Let's start by defining its visual design.
+
+Your watchList look like this image
+
+As we can see we have to render list of movies that are added to watch list We will be using tabel to render it and it should contains Name, Ratings , Popularity  and Genere properties
+
+code
+function WatchList() {
+    
+    return (
+        <div className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
+            <table className="w-full border-collapse bg-white text-left text-sm text-gray-500">
+                <thead>  
+                    <tr className="bg-gray-50">
+                        <th className="px-6 py-4 font-medium text-gray-900">Name</th> 
+                        <th>
+                            <div className="flex">
+                                <div>Ratings</div>
+                            </div>
+                        </th>
+                        <th>
+                            <div className="flex">
+                                <div>Popularity</div>
+                            </div>
+                        </th>
+                        <th>
+                            <div className="flex">
+                                <div>Genre</div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 border-t border-gray-100">  
+                    <tr className="hover:bg-gray-50">
+                        <td className="flex items-center px-6 py-4 font-normal text-gray-900">
+                            <img className="h-[6rem] w-[10rem] object-fit" src="" alt="" />
+                            <div className="font-medium text-gray-700 text-sm">Star Wars</div>
+                        </td>
+                        <td className="pl-6 py-4">
+                            7.8
+                        </td>
+                        <td className="pl-6 py-4">
+                            7.8
+                        </td>
+                        <td className="pl-2 py-4">
+                            Action
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    );
+}
+export default WatchList;
+
+Now, we'd like to incorporate this data. Inside the table body, We will utilize the movies array: We will be using the data in local storage for that
+
+steps
+Define a watchList state variable -> it will be empty
+use useEffect to get the list of movies
+update the state variable
+and replace the static values with
+code
+function WatchList() {
+    
+const [watchList,setWatchList]=useState([]);
+    
+     useEffect(()=>{
+      let moviesFromLocalStorage = localStorage.getItem('movies')
+      if(!moviesFromLocalStorage){
+        return 
+      }
+      setWatchList(JSON.parse(moviesFromLocalStorage))
+  } , [])
+    
+    return (
+        <div className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
+            <table className="w-full border-collapse bg-white text-left text-sm text-gray-500">
+                <thead>  
+                    <tr className="bg-gray-50">
+                        <th className="px-6 py-4 font-medium text-gray-900">Name</th> 
+                        <th>
+                            <div className="flex">
+                                <div>Ratings</div>
+                            </div>
+                        </th>
+                        <th>
+                            <div className="flex">
+                                <div>Popularity</div>
+                            </div>
+                        </th>
+                        <th>
+                            <div className="flex">
+                                <div>Genre</div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 border-t border-gray-100">  
+                    {watchList.map((movie) => (
+                        <tr className="hover:bg-gray-50" key={movie.id}>
+                            <td className="flex items-center px-6 py-4 font-normal text-gray-900">
+                                <img className="h-[6rem] w-[10rem] object-fit" src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`} alt="" />
+                                <div className="font-medium text-gray-700 text-sm">{movie.title}</div>
+                            </td>
+                            <td className="pl-6 py-4">
+                                {movie.vote_average}
+                            </td>
+                            <td className="pl-6 py-4">
+                                {movie.popularity}
+                            </td>
+                            <td className="pl-2 py-4">
+                                Action
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+}
+
+export default WatchList;
+
+Now, the WatchList component displays a list of movies.
+It uses the movie array to populate the movie details.
+Each movie is displayed within a table row (). Output:
+image
+
+Note: We need to figure out how we will get the correct genere as it is harcoded as of now
+
+rendering correct genre
+Steps we will be using genres from the utility file that we created in the last lecture watchList.jsx ``` import genreids from "../utilities/generes";
+
+function WatchList(){
+......
+
+ <td>{genreids[movie.genre_ids[0]]}</td>
+....... } ```
+
+Styling Explaination of above component
+Sure, let's break down the Tailwind CSS classes used in the provided React component:
+
+<div className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
+overflow-hidden: This class hides any content that overflows the container's boundary.
+rounded-lg: This class applies rounded corners to the container, making it visually softer.
+border: This class applies a border to the container.
+border-gray-200: This class sets the color of the border to a shade of gray.
+shadow-md: This class applies a medium shadow to the container, giving it depth.
+m-5: This class adds margin spacing of size 5 on all sides of the container.
+<table className="w-full border-collapse bg-white text-left text-sm text-gray-500">
+w-full: This class makes the table take up the full width of its container.
+border-collapse: This class collapses the borders of adjacent cells into a single border.
+bg-white: This class sets the background color of the table to white.
+text-left: This class aligns the text in the table cells to the left.
+text-sm: This class sets the font size of the text in the table cells to small.
+text-gray-500: This class sets the text color to a shade of gray.
+<tr className="bg-gray-50">
+bg-gray-50: This class sets the background color of the table row to a light gray shade.
+<th className="px-6 py-4 font-medium text-gray-900">Name</th>
+px-6: This class adds horizontal padding of size 6 to the table header cell.
+py-4: This class adds vertical padding of size 4 to the table header cell.
+font-medium: This class applies a medium font weight to the text in the table header cell.
+text-gray-900: This class sets the text color to a dark gray shade.
+<td className="flex items-center px-6 py-4 font-normal text-gray-900">
+flex: This class makes the table data cell a flex container.
+items-center: This class vertically centers the content inside the flex container.
+px-6: This class adds horizontal padding of size 6 to the table data cell.
+py-4: This class adds vertical padding of size 4 to the table data cell.
+font-normal: This class applies a normal font weight to the text in the table data cell.
+text-gray-900: This class sets the text color to a dark gray shade.
+<img className="h-[6rem] w-[10rem] object-fit" src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`} alt="" />
+h-[6rem]: This class sets the height of the image to 6rem (using a responsive length unit).
+w-[10rem]: This class sets the width of the image to 10rem (using a responsive length unit).
+object-fit: This class ensures that the image maintains its aspect ratio while fitting within its container.
