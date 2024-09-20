@@ -18,13 +18,13 @@ function Movies() {
   const addtoWatchList = (movieObj) => {
     let updatedWatchlist=[...watchList, movieObj];
     setWatchList(updatedWatchlist);
-    localStorage.setItem("watchlist", JSON.stringify(updatedWatchlist));
+    // localStorage.setItem("watchlist", JSON.stringify(updatedWatchlist));
   }
 
   const removeFromWatchList = (movieObj) => {
     const updatedWatchList = watchList.filter((movie) => movie.id!=movieObj.id);
     setWatchList([...updatedWatchList]);
-    localStorage.setItem("watchlist", JSON.stringify(updatedWatchList));
+    // localStorage.setItem("watchlist", JSON.stringify(updatedWatchList));
   }
   useEffect(() => {
     const getMovies = async function () {
@@ -45,12 +45,12 @@ function Movies() {
     getMovies();
   }, [pageNo]);
 
-  useEffect(() => {
-    if(localStorage.getItem("watchlist")){
-      let watchlistFromLS = JSON.parse(localStorage.getItem("watchlist"));
-      setWatchList(watchlistFromLS);
-    }
-  },[])
+  // useEffect(() => {
+  //   if(localStorage.getItem("watchlist")){
+  //     let watchlistFromLS = JSON.parse(localStorage.getItem("watchlist"));
+  //     setWatchList(watchlistFromLS);
+  //   }
+  // },[])
 
   return (
     <>

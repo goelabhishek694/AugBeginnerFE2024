@@ -14,6 +14,7 @@ import TemperatureInput from './Components/TemperatureInput'
 import TemperatureDisplay from './Components/TemperatureDisplay'
 import UseEffectHook from './Components/UseEffectHook'
 import ReactRouterDOM from './Components/ReactRouterDOM'
+import Context from './Components/Context'
 
 function App() {
   const [count, setCount] = useState(0);
@@ -49,7 +50,8 @@ function App() {
       {/* <TemperatureInput temperature={temperature} updateTemperature={updateTemperature}></TemperatureInput>
       <TemperatureDisplay temperature={temperature} ></TemperatureDisplay> */}
       {/* <UseEffectHook></UseEffectHook> */}
-      <ReactRouterDOM></ReactRouterDOM>
+      {/* <ReactRouterDOM></ReactRouterDOM> */}
+      <Context></Context>
       </>
   )
 }

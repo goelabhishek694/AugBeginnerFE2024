@@ -6,13 +6,13 @@ function Watchlist() {
   const [genre, setGenre] = useState(["All Genres"]);
   const [currGenre, setCurrGenre] = useState("");
 
-  useEffect(() => {
-    if (localStorage.getItem("watchlist")) {
-      let updatedWatchList = JSON.parse(localStorage.getItem("watchlist"));
-      console.log(updatedWatchList);
-      setWatchlist(updatedWatchList);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (localStorage.getItem("watchlist")) {
+  //     let updatedWatchList = JSON.parse(localStorage.getItem("watchlist"));
+  //     console.log(updatedWatchList);
+  //     setWatchlist(updatedWatchList);
+  //   }
+  // }, []);
 
   const handleIncreasingSorting = () => {
     console.log("sort increasing on basis of rating");
@@ -50,7 +50,7 @@ function Watchlist() {
     let updatedWatchlist = watchlist.filter((movie)=> movie.id != movieToBeDeleted.id);
     setWatchlist(updatedWatchlist);
     // 2. delete it from LS , so that when page is reloaded that movie does not comes up 
-    localStorage.setItem("watchlist", JSON.stringify(updatedWatchlist));
+    // localStorage.setItem("watchlist", JSON.stringify(updatedWatchlist));
 
   }
 
