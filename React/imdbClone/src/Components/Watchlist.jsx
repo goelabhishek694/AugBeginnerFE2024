@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import genreids from "../../utils";
+import genreidName from "../../utils";
 function Watchlist() {
   const [watchlist, setWatchlist] = useState([]);
   const [search, setSearch] = useState("");
-  const [genre, setGenre] = useState([]);
+  const [genre, setGenre] = useState(["All Genres"]);
+  const [currGenre, setCurrGenre] = useState("");
+
   useEffect(() => {
     if (localStorage.getItem("watchlist")) {
       let updatedWatchList = JSON.parse(localStorage.getItem("watchlist"));
@@ -31,19 +33,32 @@ function Watchlist() {
   }
 
   useEffect(() => {
-    let allGenres = watchlist.map((movieObj) => genreids[movieObj.genre_ids[0]]);
+    let allGenres = watchlist.map((movieObj) => genreidName[movieObj.genre_ids[0]]);
     console.log(allGenres);
     let uniqueGenres = new Set(allGenres);
     console.log(uniqueGenres);
-    setGenre([...uniqueGenres]);
+    setGenre(["All Genres", ...uniqueGenres]);
   },[watchlist])
+
+  const handleGenre = (genreName) => {
+    setCurrGenre(genreName);
+  }
+
+  const handleDelete = (movieToBeDeleted) => {
+    //delete a movie from watchlist 
+    // 1. filter that movie from watchlist , it would not be visible on UI
+    let updatedWatchlist = watchlist.filter((movie)=> movie.id != movieToBeDeleted.id);
+    setWatchlist(updatedWatchlist);
+    // 2. delete it from LS , so that when page is reloaded that movie does not comes up 
+    localStorage.setItem("watchlist", JSON.stringify(updatedWatchlist));
+
+  }
 
   return (
     <>
     <div className="flex flex-wrap justify-around ">
-      <button className="border border-gray-200 bg-blue-300 m-4 py-3 px-6 rounded-xl">All Genres</button>
       {
-        genre.map(genreName=>(<button className="border border-gray-200 bg-blue-300 m-4 py-3 px-6 rounded-xl">{genreName}</button>))
+        genre.map(genreName=>(<button className={genreName==currGenre ? "border border-gray-200 bg-blue-600 m-4 py-3 px-6 rounded-xl" : "border border-gray-200 bg-blue-300 m-4 py-3 px-6 rounded-xl"} onClick={()=>handleGenre(genreName)}>{genreName}</button>))
       }
     </div>
     <div>
@@ -81,6 +96,11 @@ function Watchlist() {
         </thead>
         <tbody className="divide-y divide gray-100 border-t border-gray-100">
           {watchlist
+          .filter((movieObj) => {
+            //return if movieObj's genre is equl to currGenre
+            if(currGenre && currGenre!="All Genres") return genreidName[movieObj.genre_ids[0]] == currGenre
+            return movieObj;
+          })
           // this function is sued to filter watchlist on the basis of search 
           .filter((movieObj)=> {
             let searchText = search.toLowerCase();
@@ -102,7 +122,8 @@ function Watchlist() {
               </td>
               <td className='className="pl-6 py-4"'>{movieObj.vote_average}</td>
               <td className="pl-6 py-4">{movieObj.popularity}</td>
-              <td className="pl-6 py-4">{genreids[movieObj.genre_ids[0]]}</td>
+              <td className="pl-6 py-4">{genreidName[movieObj.genre_ids[0]]}</td>
+              <td className="pl-6 py-4 text-red-600" onClick={()=>handleDelete(movieObj)}><i class="fa-solid fa-trash"></i></td>
             </tr>
           ))}
         </tbody>

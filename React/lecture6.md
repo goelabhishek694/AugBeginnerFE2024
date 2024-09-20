@@ -655,12 +655,12 @@ image
 Note: We need to figure out how we will get the correct genere as it is harcoded as of now
 
 rendering correct genre
-Steps we will be using genres from the utility file that we created in the last lecture watchList.jsx ``` import genreids from "../utilities/generes";
+Steps we will be using genres from the utility file that we created in the last lecture watchList.jsx ``` import genreidName from "../utilities/generes";
 
 function WatchList(){
 ......
 
- <td>{genreids[movie.genre_ids[0]]}</td>
+ <td>{genreidName[movie.genre_ids[0]]}</td>
 ....... } ```
 
 Styling Explaination of above component
