@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from 'axios'
 import MovieCard from "./MovieCard";
+import { MovieContext } from "../MovieContext";
 function Movies() {
   const [movies, setMovies] = useState(null);
   const [pageNo, setPageNo] = useState(1);
-  const [watchList, setWatchList] = useState([]);
+  const {watchList,setWatchList,addtoWatchList,removeFromWatchList} = useContext(MovieContext);
 
   const handlePrev = () => {
     if (pageNo == 1) return;
@@ -15,17 +16,7 @@ function Movies() {
     setPageNo(pageNo + 1);
   };
 
-  const addtoWatchList = (movieObj) => {
-    let updatedWatchlist=[...watchList, movieObj];
-    setWatchList(updatedWatchlist);
-    // localStorage.setItem("watchlist", JSON.stringify(updatedWatchlist));
-  }
 
-  const removeFromWatchList = (movieObj) => {
-    const updatedWatchList = watchList.filter((movie) => movie.id!=movieObj.id);
-    setWatchList([...updatedWatchList]);
-    // localStorage.setItem("watchlist", JSON.stringify(updatedWatchList));
-  }
   useEffect(() => {
     const getMovies = async function () {
       console.log("calling getMovies");
@@ -45,12 +36,6 @@ function Movies() {
     getMovies();
   }, [pageNo]);
 
-  // useEffect(() => {
-  //   if(localStorage.getItem("watchlist")){
-  //     let watchlistFromLS = JSON.parse(localStorage.getItem("watchlist"));
-  //     setWatchList(watchlistFromLS);
-  //   }
-  // },[])
 
   return (
     <>

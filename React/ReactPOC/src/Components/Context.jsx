@@ -82,7 +82,7 @@ console.log(storeApnaBazaar);
 const data = {
     rice: "10kg",
     wheat: "20kg",
-    ketchup: "100kg"
+    ketchup: "100kg",
 }
 function Context() {
     const [name,setName] = useState("Swaraj");
