@@ -518,3 +518,341 @@ function Counter(){
 export default Counter;
 ```
 
+
+# Todo Example
+
+Let us take an example, we have an input box and when we click on enter that list should be added, a simple todo kind of application.
+
+
+1. Create `TodoRedux.jsx` inside `reduxComponents`.
+
+
+```javascript
+import React from 'react'
+function TodoRedux(){
+    const list = [];
+    return{
+        <>
+            <h2>Todo</h2>
+            <div style = {{ display : "flex" }}>
+                <div className = "inputBox">
+                    <input type = "text"/>
+                    <button></button>
+                </div>
+                <div className = "list">
+                    <ul>
+                        {list.map((taks, idx) => {
+                            return <li key = {idx}>{task}</li>
+                        })}
+                    </ul>
+                </div>
+            </div>
+        </>
+    }
+}
+
+export default TodoRedux;
+```
+
+
+2. The first step for redux is creating the slice, creating `TodoSlice.jsx` inside the `redux` folder, we will simply put `value: ""` and a list as initial state.
+
+```javascript
+import { createSlice } from "@reduxjs/toolkit";
+
+
+const TodoSlice = createSlice({
+    name:"toolbox",
+    initialState:{
+        value:"",
+        todoList:["task 1", "taks 2"]
+    },
+    
+});
+
+export default TodoSlice;
+```
+
+3. Next step is to create the store, goto `store.js`.
+
+
+```javascript
+import { configureStore } from "@reduxjs/toolkit";
+
+import counterSlice from './counterSlice';
+import TodoSlice from './TodoSlice';
+const store = configureStore({
+    reducer: { 
+        counterState: counterSlice.reducer,
+        todoState: TodoSlice.reducer
+    }
+});
+
+export default store;
+```
+
+4. We do not need to make any changes in `main.jsx` as the whole application is already wrapped in `Provider`.
+5. Now we will have to access the state in TodoRedux by `useSelector()`.
+
+
+
+
+```javascript
+import { useSelector } from "react-redux";
+import React from 'react'
+function TodoRedux(){
+    const {value, todoList} = useSelector((store) => {
+        return store.todoState;
+    })
+    return{
+        <>
+            <h2>Todo</h2>
+            <div style = {{ display : "flex" }}>
+                <div className = "inputBox">
+                    <input type = "text"
+                        value = {value}
+                    />
+                    <button></button>
+                </div>
+                <div className = "list">
+                    <ul>
+                        {todoList.map((taks, idx) => {
+                            return <li key = {idx} > {task}</li>
+                        })}
+                    </ul>
+                </div>
+            </div>
+        </>
+    }
+}
+
+export default TodoRedux;
+```
+
+6. Add `TodoRedux` to the `app.jsx`.
+
+
+```javascript
+import React from 'react';
+import CounterRedux from './components/reduxComponenets/CounterRedux';
+import TodoRedux from './components/reduxComponenets/TodoRedux';
+
+function App(){
+    return {
+        <>
+        <CounterRedux></CounterRedux>
+        <TodoRedux></TodoRedux>
+        </>
+    }
+}
+
+export default App;
+```
+
+7. Now we will work on the `onChange` of the input field.
+
+
+```javascript
+import { useSelector } from "react-redux";
+import React from 'react'
+function TodoRedux(){
+    const {value, todoList} = useSelector((store) => {
+        return store.todoState;
+    })
+    const handleChange = (e) => {
+        
+    }
+    return{
+        <>
+            <h2>Todo</h2>
+            <div style = {{ display : "flex" }}>
+                <div className = "inputBox">
+                    <input type = "text"
+                        value = {value}
+                        onChange = {handleChange}
+                    />
+                    <button></button>
+                </div>
+                <div className = "list">
+                    <ul>
+                        {todoList.map((taks, idx) => {
+                            return <li key = {idx}>{task}</li>
+                        })}
+                    </ul>
+                </div>
+            </div>
+        </>
+    }
+}
+
+export default TodoRedux;
+```
+
+8. We will add a method in the slice.
+
+```javascript
+import { createSlice } from "@reduxjs/toolkit";
+
+
+const TodoSlice = createSlice({
+    name:"toolbox",
+    initialState:{
+        value:"",
+        todoList:["task 1", "taks 2"]
+    },
+    reducers: {
+        setValue: () => {
+            console.log("I am set value")
+        }
+    }
+});
+
+export default TodoSlice;
+```
+
+9. Inside our component we will use `useDispatch()` for using this method.
+
+
+```javascript
+import React from 'react'
+import { useSelector, useDispatch } from "react-redux";
+import TodoSlice from '../../redux/TodoSlice';
+const actions = TodoSlice.actions
+
+function TodoRedux(){
+    const {value, todoList} = useSelector((store) => {
+        return store.todoState;
+    })
+    const dispatch = useDispatch();
+    const handleChange = (e) => {
+        const updatedValue = e.target.value;
+        dispatch(actions.setValue(updatedValue));
+    }
+    return{
+        <>
+            <h2>Todo</h2>
+            <div style = {{ display : "flex" }}>
+                <div className = "inputBox">
+                    <input type = "text"
+                        value = {value}
+                        onChange = {handleChange}
+                    />
+                    <button></button>
+                </div>
+                <div className = "list">
+                    <ul>
+                        {todoList.map((taks, idx) => {
+                            return <li key = {idx}>{task}</li>
+                        })}
+                    </ul>
+                </div>
+            </div>
+        </>
+    }
+}
+
+export default TodoRedux;
+```
+
+10. The method will receive state as the first parameter inside the slice, and the updated Value we have passed is received as the next parameter.
+
+```javascript
+import { createSlice } from "@reduxjs/toolkit";
+
+
+const TodoSlice = createSlice({
+    name:"toolbox",
+    initialState:{
+        value:"",
+        todoList:["task 1", "taks 2"]
+    },
+    reducers: {
+        setValue: (state, descObj) => {
+            console.log("I am set value", descObj.payload);
+            state.value = descObj.payload;
+        }
+    }
+});
+
+export default TodoSlice;
+```
+
+
+11. Add a submit button and add `addValue` to the slice.
+
+**TodoRedux.jsx**
+```javascript
+import React from 'react'
+import { useSelector, useDispatch } from "react-redux";
+import TodoSlice from '../../redux/TodoSlice';
+const actions = TodoSlice.actions
+
+function TodoRedux(){
+    const {value, todoList} = useSelector((store) => {
+        return store.todoState;
+    })
+    const dispatch = useDispatch();
+    const handleChange = (e) => {
+        const updatedValue = e.target.value;
+        dispatch(actions.setValue(updatedValue));
+    }
+    const handleAddTask = (e) => {
+        
+        dispatch(actions.addtask(value));
+    }
+    return{
+        <>
+            <h2>Todo</h2>
+            <div style = {{ display : "flex" }}>
+                <div className = "inputBox">
+                    <input type = "text"
+                        value = {value}
+                        onChange = {handleChange}
+                    />
+                    <button onClick = {handleAddTask}>Submit</button>
+                </div>
+                <div className = "list">
+                    <ul>
+                        {todoList.map((taks, idx) => {
+                            return <li key = {idx}>{task}</li>
+                        })}
+                    </ul>
+                </div>
+            </div>
+        </>
+    }
+}
+
+export default TodoRedux;
+```
+
+
+**TodoSlice.jsx**
+
+
+```javascript
+import { createSlice } from "@reduxjs/toolkit";
+
+
+const TodoSlice = createSlice({
+    name:"toolbox",
+    initialState:{
+        value:"",
+        todoList:[]
+    },
+    reducers: {
+        setValue: (state, descObj) => {
+            console.log("I am set value", descObj.payload);
+            state.value = descObj.payload;
+            state.value = "";
+        }
+        addtask: (state, descObj) => {
+            const task = descObj.payload;
+            let newTaskArr = [...state.todoList, task];
+            state.todoList = newTaskArr;
+        }
+    }
+});
+
+export default TodoSlice;
+```
