@@ -21,3 +21,14 @@ const TodoSlice = createSlice({
 });
 
 export default TodoSlice
+
+// let y=10;
+// function fn(x,y){
+//     y = 2 * x;
+//     x = y * x;
+//     console.log("x ", x, " y ", y);
+// }
+
+// fn(5,2);
+// fn(5,2);
+// fn(5,2);
