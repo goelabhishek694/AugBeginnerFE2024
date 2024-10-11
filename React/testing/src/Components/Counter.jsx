@@ -11,7 +11,7 @@ function Counter() {
   return (
     <div>
         <button onClick={incCount}>+</button>
-        <h2>{count}</h2>
+        <h2>Count is {count}</h2>
         <button onClick={decCount}>-</button>
     </div>
   )
