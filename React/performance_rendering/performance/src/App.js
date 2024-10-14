@@ -76,9 +76,3 @@ function App() {
 export default App;
 
 
-
-function foo(a,b){
-  return a+b
-}
-
-
