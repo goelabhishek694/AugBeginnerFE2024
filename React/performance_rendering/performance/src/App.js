@@ -2,6 +2,8 @@
 import "./App.css";
 import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
 import { useEffect, useState, Suspense, lazy } from "react";
+import UseMemo from "./Components/UseMemo";
+import UseCallback from "./Components/UseCallback";
 // import HomePage from "./Components/HomePage";
 // import ContactPage from "./Components/ContactPage";
 // import AboutPage from "./Components/AboutPage";
@@ -44,32 +46,34 @@ function App() {
   // };
 
   return (
-    <>
-      <BrowserRouter>
-        <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/about">About</Link>
-              </li>
-              <li>
-                <Link to="/contact">Contact</Link>
-              </li>
-            </ul>
-          </nav>
-          <Suspense fallback={<div>Loading...</div>}>
-            <Routes>
-              <Route path="/" element={<HomePage />}></Route>
-              <Route path="/contact" element={<ContactPage />}></Route>
-              <Route path="/about" element={<AboutPage />}></Route>
-            </Routes>
-          </Suspense>
-        </div>
-      </BrowserRouter>
-    </>
+    // <>
+    //   <BrowserRouter>
+    //     <div>
+    //       <nav>
+    //         <ul>
+    //           <li>
+    //             <Link to="/">Home</Link>
+    //           </li>
+    //           <li>
+    //             <Link to="/about">About</Link>
+    //           </li>
+    //           <li>
+    //             <Link to="/contact">Contact</Link>
+    //           </li>
+    //         </ul>
+    //       </nav>
+    //       <Suspense fallback={<div>Loading...</div>}>
+    //         <Routes>
+    //           <Route path="/" element={<HomePage />}></Route>
+    //           <Route path="/contact" element={<ContactPage />}></Route>
+    //           <Route path="/about" element={<AboutPage />}></Route>
+    //         </Routes>
+    //       </Suspense>
+    //     </div>
+    //   </BrowserRouter>
+    // </>
+    // <UseMemo></UseMemo>
+    <UseCallback></UseCallback>
   );
 }
 
