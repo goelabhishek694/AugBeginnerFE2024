@@ -1,41 +1,47 @@
 // import logo from "./logo.svg";
 import "./App.css";
 import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
+import { useEffect, useState, Suspense, lazy } from "react";
 // import HomePage from "./Components/HomePage";
 // import ContactPage from "./Components/ContactPage";
 // import AboutPage from "./Components/AboutPage";
 // import Navbar from "./Components/Navbar";
 
-import { useEffect, useState } from "react";
+//lazy load the components
+// Homepage = cb function -> import my comp. 
+const HomePage = lazy(() => import("./Components/HomePage"));
+const ContactPage = lazy(() => import("./Components/ContactPage"));
+const AboutPage = lazy(() => import("./Components/AboutPage"));
+
 function App() {
-  const [HomePage, setHomePage] = useState(null);
-  const [AboutPage, setAboutPage] = useState(null);
-  const [ContactPage, setContactPage] = useState(null);
+  // const [HomePage, setHomePage] = useState(null);
+  // const [AboutPage, setAboutPage] = useState(null);
+  // const [ContactPage, setContactPage] = useState(null);
 
   //preloading the homepage component
-  useEffect(() => {
-    import("./Components/HomePage").then((module) =>
-      setHomePage(() => module.default)
-    );
-  }, []);
+  // useEffect(() => {
+  //   import("./Components/HomePage").then((module) =>
+  //     setHomePage(() => module.default)
+  //   );
+  // }, []);
 
-  const loadHomePage = () => {
-    import("./Components/HomePage").then((module) =>
-      setHomePage(() => module.default)
-    );
-  };
+  // const loadHomePage = () => {
+  //   import("./Components/HomePage").then((module) =>
+  //     setHomePage(() => module.default)
+  //   );
+  // };
 
-  const loadAboutPage = () => {
-    import("./Components/AboutPage").then((module) =>
-      setAboutPage(() => module.default)
-    );
-  };
+  // const loadAboutPage = () => {
+  //   import("./Components/AboutPage").then((module) =>
+  //     setAboutPage(() => module.default)
+  //   );
+  // };
 
-  const loadContactPage = () => {
-    import("./Components/ContactPage").then((module) =>
-      setContactPage(() => module.default)
-    );
-  };
+  // const loadContactPage = () => {
+  //   import("./Components/ContactPage").then((module) =>
+  //     setContactPage(() => module.default)
+  //   );
+  // };
 
   return (
     <>
@@ -44,21 +50,23 @@ function App() {
           <nav>
             <ul>
               <li>
-                <Link to="/" onClick={loadHomePage}>Home</Link>
+                <Link to="/">Home</Link>
               </li>
               <li>
-                <Link to="/about" onClick={loadAboutPage}>About</Link>
+                <Link to="/about">About</Link>
               </li>
               <li>
-                <Link to="/contact" onClick={loadContactPage}>Contact</Link>
+                <Link to="/contact">Contact</Link>
               </li>
             </ul>
           </nav>
-          <Routes>
-            <Route path="/" element={HomePage ? <HomePage /> : <div>Loading...</div>}></Route>
-            <Route path="/contact" element={ContactPage ? <ContactPage /> : <div>Loading...</div>}></Route>
-            <Route path="/about" element={AboutPage ? <AboutPage /> : <div>Loading...</div>}></Route>
-          </Routes>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Routes>
+              <Route path="/" element={<HomePage />}></Route>
+              <Route path="/contact" element={<ContactPage />}></Route>
+              <Route path="/about" element={<AboutPage />}></Route>
+            </Routes>
+          </Suspense>
         </div>
       </BrowserRouter>
     </>
@@ -66,3 +74,11 @@ function App() {
 }
 
 export default App;
+
+
+
+function foo(a,b){
+  return a+b
+}
+
+
