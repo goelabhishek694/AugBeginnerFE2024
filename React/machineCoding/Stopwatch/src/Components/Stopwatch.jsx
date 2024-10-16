@@ -23,8 +23,8 @@ function Stopwatch() {
     }
 
     const stopTimer = () => {
-        clearInterval(timerRef.current);
         setIsRunning(false);
+        clearInterval(timerRef.current);
     }
 
     const resetTimer = () => {
