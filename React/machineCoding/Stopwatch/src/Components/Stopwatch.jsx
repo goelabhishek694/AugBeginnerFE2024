@@ -43,3 +43,5 @@ function Stopwatch() {
 }
 
 export default Stopwatch
+
+//usecallback can be used and useMemo for further optimizations
