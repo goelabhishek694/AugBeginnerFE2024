@@ -5,6 +5,7 @@ import './App.css'
 import Counter from './Components/Counter'
 import CounterFn from './Components/CounterFn'
 import TodoList from './Components/TodoList'
+import TodoListFn from './Components/TodoListFn'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -13,7 +14,8 @@ function App() {
     <>
     {/* <Counter/> */}
     {/* <CounterFn/> */}
-    <TodoList/>
+    {/* <TodoList/> */}
+    <TodoListFn></TodoListFn>
     </>
   )
 }
